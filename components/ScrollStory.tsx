@@ -76,6 +76,28 @@ export default function ScrollStory() {
           .to(q("[data-hero-chapter]"), { y: -40, autoAlpha: 0, duration: 0.25 }, 1.15);
       }
 
+      /* Sub-page hero: intro, then drifts away as the page scrolls ------- */
+      const pageHero = document.querySelector<HTMLElement>("[data-page-hero]");
+      if (pageHero) {
+        const q = gsap.utils.selector(pageHero);
+        const title = new SplitText(q("[data-page-hero-title]"), { type: "words", mask: "words" });
+
+        gsap
+          .timeline({ defaults: { ease: "power4.out" } })
+          .from(q("[data-page-hero-bg]"), { scale: 1.3, duration: 2.2, ease: "power2.out" }, 0)
+          .from(q("[data-page-hero-badge]"), { x: -30, autoAlpha: 0, duration: 0.9 }, 0.25)
+          .from(title.words, { yPercent: 115, duration: 1.1, stagger: 0.09 }, 0.4)
+          .from(q("[data-page-hero-copy]"), { y: 30, autoAlpha: 0, duration: 1 }, 0.9);
+
+        gsap
+          .timeline({
+            defaults: { ease: "none" },
+            scrollTrigger: { trigger: pageHero, start: "top top", end: "bottom top", scrub: true },
+          })
+          .to(q("[data-page-hero-bg]"), { yPercent: 25 }, 0)
+          .to(q("[data-page-hero-content]"), { y: -80, autoAlpha: 0 }, 0);
+      }
+
       /* Headings: word-by-word mask reveal ------------------------------- */
       gsap.utils.toArray<HTMLElement>("[data-split]").forEach((el) => {
         SplitText.create(el, {
@@ -182,6 +204,58 @@ export default function ScrollStory() {
             scrollTrigger: { trigger: el, start: "top bottom", end: "center center", scrub: 1 },
           },
         );
+      });
+    });
+
+    /* Timeline: pinned chapter-by-chapter journey (desktop) --------------- */
+    mm.add("(min-width: 1024px)", () => {
+      const section = document.querySelector<HTMLElement>("[data-timeline]");
+      if (!section) return;
+      const q = gsap.utils.selector(section);
+      const items = q("[data-timeline-item]");
+      const dots = q("[data-timeline-dot]");
+      const images = q("[data-timeline-image]");
+
+      gsap.set(images, { autoAlpha: 1, clipPath: "inset(100% 0% 0% 0%)" });
+      gsap.set(images[0], { clipPath: "inset(0% 0% 0% 0%)" });
+      gsap.set(items.slice(1), { opacity: 0.25 });
+      gsap.set(dots[0], { scale: 1.6, "--tw-ring-color": "rgba(198,161,91,0.25)" });
+
+      const tl = gsap.timeline({
+        defaults: { ease: "none" },
+        scrollTrigger: {
+          trigger: section,
+          start: "center center+=40", // header is 80px tall
+          end: `+=${items.length * 70}%`,
+          pin: true,
+          scrub: 1,
+          // Created after the reveals below it; measure first so their offsets include the pin
+          refreshPriority: 1,
+        },
+      });
+      tl.fromTo(q("[data-timeline-progress]"), { scaleY: 0 }, { scaleY: 1, duration: items.length }, 0);
+
+      items.forEach((_, i) => {
+        if (i === 0) return;
+        tl.to(items[i], { opacity: 1, duration: 0.4 }, i)
+          .to(dots[i - 1], { scale: 1, "--tw-ring-color": "rgba(198,161,91,0)", duration: 0.3 }, i)
+          .to(dots[i], { scale: 1.6, "--tw-ring-color": "rgba(198,161,91,0.25)", duration: 0.3 }, i)
+          .to(images[i], { clipPath: "inset(0% 0% 0% 0%)", duration: 0.7, ease: "power2.inOut" }, i - 0.2)
+          .from(images[i].querySelector("img"), { scale: 1.3, duration: 0.9 }, i - 0.2);
+      });
+    });
+
+    /* Timeline on small screens: no pin, milestones simply cascade -------- */
+    mm.add("(max-width: 1023px)", () => {
+      const items = gsap.utils.toArray<HTMLElement>("[data-timeline-item]");
+      items.forEach((item) => {
+        gsap.from(item, {
+          x: -30,
+          autoAlpha: 0,
+          duration: 0.8,
+          ease: "power3.out",
+          scrollTrigger: { trigger: item, start: "top 88%" },
+        });
       });
     });
   });

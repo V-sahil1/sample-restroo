@@ -114,19 +114,21 @@ export function PageHero({
   image?: string;
 }) {
   return (
-    <section className="relative -mt-20 flex min-h-[56vh] w-full items-end overflow-hidden bg-forest">
-      <Image src={image} alt="" fill preload sizes="100vw" className="object-cover" />
+    <section data-page-hero className="relative -mt-20 flex min-h-[56vh] w-full items-end overflow-hidden bg-forest">
+      <div data-page-hero-bg className="absolute inset-0">
+        <Image src={image} alt="" fill preload sizes="100vw" className="object-cover" />
+      </div>
       <div className="absolute inset-0 bg-gradient-to-t from-forest via-forest/85 to-[#00140a]/75 mix-blend-multiply" />
-      <div className={`${container} relative z-10 pt-40 pb-space-2xl md:pb-space-3xl`}>
-        <div className="mb-space-md inline-flex items-center gap-space-sm rounded-pill border border-gold/40 bg-forest/80 px-space-md py-space-xs backdrop-blur-md">
+      <div data-page-hero-content className={`${container} relative z-10 pt-40 pb-space-2xl md:pb-space-3xl`}>
+        <div data-page-hero-badge className="mb-space-md inline-flex items-center gap-space-sm rounded-pill border border-gold/40 bg-forest/80 px-space-md py-space-xs backdrop-blur-md">
           <span className="h-1.5 w-1.5 rounded-full bg-gold" />
           <span className="text-label-sm uppercase tracking-[0.25em] text-gold-light">{eyebrow}</span>
         </div>
-        <h1 className="max-w-4xl font-display text-[2.75rem] leading-[1.08] font-semibold tracking-tight text-white sm:text-display-lg md:text-display">
+        <h1 data-page-hero-title className="max-w-4xl font-display text-[2.75rem] leading-[1.15] font-semibold tracking-tight text-white sm:text-display-lg md:text-display">
           {title} {accent && <span className="font-normal italic text-gold-bright">{accent}</span>}
         </h1>
         {description && (
-          <p className="mt-space-md max-w-2xl text-body-lg leading-relaxed text-mint/90">{description}</p>
+          <p data-page-hero-copy className="mt-space-md max-w-2xl text-body-lg leading-relaxed text-mint/90">{description}</p>
         )}
       </div>
     </section>

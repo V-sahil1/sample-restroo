@@ -3,6 +3,7 @@ import Image from "next/image";
 import { IMAGES } from "@/lib/data";
 import { Eyebrow, Icon } from "@/components/ui";
 import { FinaleBanner, PageHero, Reviews, Section, Story } from "@/components/sections";
+import ScrollStory from "@/components/ScrollStory";
 
 export const metadata: Metadata = { title: "Our Story" };
 
@@ -25,15 +26,40 @@ const PILLARS = [
 ];
 
 const TIMELINE = [
-  { year: "2016", text: "A twelve-seat supper club opens behind a spice merchant on Lodhi Road." },
-  { year: "2019", text: "Sambhar New Delhi opens on Lodhi Promenade with a full tandoor kitchen." },
-  { year: "2022", text: "The Botanical Spirits bar launches its saffron smoke cloche programme." },
-  { year: "2024", text: "Our Mayfair salon opens on Berkeley Square, London." },
+  {
+    year: "2018",
+    text: "A twelve-seat supper club lights its first tandoor in a brick-walled Lodhi Road warehouse.",
+    image: "/images/journey-2018.jpg",
+    alt: "The original brick-walled supper club at night, lit by copper cage pendants",
+    position: "center 58%",
+  },
+  {
+    year: "2022",
+    text: "Sambhar New Delhi opens its dining room: hand-plastered walls, low banquettes and amber light.",
+    image: "/images/journey-2022.jpg",
+    alt: "Long banquette dining room beneath a row of glowing amber pendants",
+    position: "center 55%",
+  },
+  {
+    year: "2024",
+    text: "The Velvet Salon arrives, with crystal chandeliers, candlelit marble and our first tasting evenings.",
+    image: "/images/journey-2024.jpg",
+    alt: "Velvet salon with crystal chandeliers, red velvet chairs and candlelit marble tables",
+    position: "center 45%",
+  },
+  {
+    year: "2026",
+    text: "Our Mayfair salon opens on Berkeley Square, with private dining beneath the brass arch.",
+    image: "/images/journey-2026.png",
+    alt: "Guests gathered at a round table in the Mayfair private dining room",
+    position: "center",
+  },
 ];
 
 export default function OurStoryPage() {
   return (
     <>
+      <ScrollStory />
       <PageHero
         eyebrow="Our Story"
         title="Rooted in India."
@@ -46,11 +72,11 @@ export default function OurStoryPage() {
       <Section>
         <div className="mx-auto mb-space-2xl max-w-2xl text-center">
           <Eyebrow>Kitchen Philosophy</Eyebrow>
-          <h2 className="mt-space-xs font-display text-[28px] leading-[36px] font-semibold text-forest md:text-headline-lg">
+          <h2 data-split className="mt-space-xs font-display text-[28px] leading-[36px] font-semibold text-forest md:text-headline-lg">
             Three Principles, Every Plate.
           </h2>
         </div>
-        <div className="grid grid-cols-1 gap-space-lg md:grid-cols-3">
+        <div data-stagger className="grid grid-cols-1 gap-space-lg md:grid-cols-3">
           {PILLARS.map((p) => (
             <div
               key={p.title}
@@ -66,17 +92,27 @@ export default function OurStoryPage() {
         </div>
       </Section>
 
-      <section className="w-full bg-obsidian py-space-3xl text-ivory">
+      {/* Pinned on desktop by ScrollStory: the gold line draws down and each year takes the frame */}
+      <section data-timeline className="w-full bg-obsidian py-space-3xl text-ivory">
         <div className="mx-auto grid w-full max-w-[1440px] grid-cols-1 items-center gap-space-2xl px-margin-mobile md:px-margin-tablet lg:grid-cols-12 lg:px-margin">
           <div className="lg:col-span-5">
             <Eyebrow dark className="font-normal">Our Journey</Eyebrow>
-            <h2 className="mt-space-xs font-display text-[28px] leading-tight text-white md:text-headline-lg">
+            <h2 data-split className="mt-space-xs font-display text-[28px] leading-tight text-white md:text-headline-lg">
               From a Supper Club to Two Salons.
             </h2>
-            <ol className="mt-space-xl flex flex-col gap-space-lg border-l border-gold/40 pl-space-lg">
+            <ol className="relative mt-space-xl flex flex-col gap-space-lg pl-space-lg">
+              <span aria-hidden="true" className="absolute top-0 left-0 h-full w-px bg-gold/25" />
+              <span
+                data-timeline-progress
+                aria-hidden="true"
+                className="absolute top-0 left-0 h-full w-px origin-top bg-gold-bright"
+              />
               {TIMELINE.map((t) => (
-                <li key={t.year} className="relative">
-                  <span className="absolute top-1.5 -left-[calc(1.75rem+5px)] h-2.5 w-2.5 rounded-full bg-gold" />
+                <li key={t.year} data-timeline-item className="relative">
+                  <span
+                    data-timeline-dot
+                    className="absolute top-1.5 -left-[calc(1.75rem+5px)] h-2.5 w-2.5 rounded-full bg-gold ring-4 ring-gold/0"
+                  />
                   <p className="font-display text-headline-sm text-gold-bright">{t.year}</p>
                   <p className="text-body-md text-white/80">{t.text}</p>
                 </li>
@@ -84,13 +120,26 @@ export default function OurStoryPage() {
             </ol>
           </div>
           <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-white/10 lg:col-span-7">
-            <Image
-              src={IMAGES.interior}
-              alt="The Sambhar dining salon at night"
-              fill
-              sizes="(min-width: 1024px) 58vw, 100vw"
-              className="object-cover"
-            />
+            {TIMELINE.map((t, i) => (
+              <div
+                key={t.year}
+                data-timeline-image
+                className={`absolute inset-0 ${i === TIMELINE.length - 1 ? "" : "invisible"}`}
+              >
+                <Image
+                  src={t.image}
+                  alt={t.alt}
+                  fill
+                  sizes="(min-width: 1024px) 58vw, 100vw"
+                  className="object-cover"
+                  style={{ objectPosition: t.position }}
+                />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-obsidian/70 via-transparent to-transparent" />
+                <span className="absolute bottom-space-md left-space-lg font-display text-[4rem] leading-none font-semibold text-white/90 md:text-[6rem]">
+                  {t.year}
+                </span>
+              </div>
+            ))}
           </div>
         </div>
       </section>
