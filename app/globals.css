@@ -1,0 +1,140 @@
+@import "tailwindcss";
+
+/* Design tokens — "Modern Royal Indian Dining" (see DESIGN.md) */
+@theme {
+  /* Palette */
+  --color-forest: #0e2a1d;
+  --color-forest-soft: #133a29;
+  --color-forest-mid: #174230;
+  --color-obsidian: #071710;
+  --color-gold: #c6a15b;
+  --color-gold-hover: #b5914a;
+  --color-gold-bright: #d4af37;
+  --color-gold-light: #e8d3a7;
+  --color-mint: #caead6;
+  --color-sage: #afceba;
+  --color-sage-50: #f8faf7;
+  --color-sage-100: #f1f4ef;
+  --color-sage-200: #e8efea;
+  --color-line: #e0e3de;
+  --color-outline-variant: #c2c8c2;
+  --color-ink: #424844;
+  --color-on-surface: #121d16;
+  --color-ivory: #eff2ec;
+
+  /* Families (wired to next/font variables in layout.tsx) */
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-playfair), Georgia, serif;
+
+  /* Type scale */
+  --text-display: 4.5rem;
+  --text-display--line-height: 5rem;
+  --text-display--letter-spacing: -0.02em;
+  --text-display--font-weight: 600;
+  --text-display-lg: 56px;
+  --text-display-lg--line-height: 64px;
+  --text-display-lg--letter-spacing: -0.02em;
+  --text-display-lg--font-weight: 600;
+  --text-headline-lg: 36px;
+  --text-headline-lg--line-height: 44px;
+  --text-headline-lg--letter-spacing: -0.01em;
+  --text-headline-lg--font-weight: 500;
+  --text-headline-md: 26px;
+  --text-headline-md--line-height: 34px;
+  --text-headline-md--font-weight: 500;
+  --text-headline-sm: 20px;
+  --text-headline-sm--line-height: 28px;
+  --text-headline-sm--font-weight: 600;
+  --text-title-lg: 1.25rem;
+  --text-title-lg--line-height: 1.75rem;
+  --text-title-lg--font-weight: 600;
+  --text-title-md: 18px;
+  --text-title-md--line-height: 26px;
+  --text-title-md--font-weight: 600;
+  --text-body-lg: 17px;
+  --text-body-lg--line-height: 28px;
+  --text-body-md: 15px;
+  --text-body-md--line-height: 24px;
+  --text-body-sm: 13px;
+  --text-body-sm--line-height: 20px;
+  --text-label-lg: 13px;
+  --text-label-lg--line-height: 18px;
+  --text-label-lg--letter-spacing: 0.08em;
+  --text-label-lg--font-weight: 600;
+  --text-label-sm: 11px;
+  --text-label-sm--line-height: 16px;
+  --text-label-sm--letter-spacing: 0.12em;
+  --text-label-sm--font-weight: 600;
+
+  /* Spacing */
+  --spacing-space-xs: 0.25rem;
+  --spacing-space-sm: 0.5rem;
+  --spacing-space-md: 1rem;
+  --spacing-space-lg: 1.75rem;
+  --spacing-space-xl: 3rem;
+  --spacing-space-2xl: 4rem;
+  --spacing-space-3xl: 6rem;
+  --spacing-gutter: 1.5rem;
+  --spacing-margin: 4rem;
+  --spacing-margin-tablet: 2.5rem;
+  --spacing-margin-mobile: 1.25rem;
+
+  /* Radii (the design's config tightens the defaults) */
+  --radius-lg: 0.25rem;
+  --radius-xl: 0.5rem;
+  --radius-pill: 0.75rem;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #ffffff;
+  color: var(--color-on-surface);
+  overscroll-behavior: none;
+}
+
+/* Section anchors clear the fixed 80px header */
+[id] {
+  scroll-margin-top: 5rem;
+}
+
+.material-symbols-outlined {
+  font-family: "Material Symbols Outlined";
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+}
+
+.material-symbols-outlined.filled {
+  font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24;
+}
+
+/* Brass focus ring for form controls (DESIGN.md › Input Fields) */
+.field {
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid rgba(26, 30, 27, 0.15);
+  border-radius: 0.25rem;
+  padding: 0.75rem 1rem;
+  font-size: 15px;
+  line-height: 24px;
+  color: var(--color-on-surface);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.field:focus {
+  outline: none;
+  border-color: #c5a059;
+  box-shadow: 0 0 0 4px rgba(197, 160, 89, 0.15);
+}
+.field[aria-invalid="true"] {
+  border-color: #ba1a1a;
+}
